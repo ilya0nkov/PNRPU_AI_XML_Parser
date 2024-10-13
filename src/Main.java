@@ -2,15 +2,77 @@ import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.io.FilenameFilter;
+import java.io.*;
 
 public class Main {
 
+    private static String outputPath = "";
+    private static String inputPath = "";
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String input = "";
+        boolean isDir = false;
+
+        try{
+            System.out.println("Как будут заданы входные данные?:\n" +
+                    "Введите цифру\n" +
+                    "f - если будет задан путь до файла\n" +
+                    "d - если будет задан путь до директории ");
+            input = scanner.next();
+            if (input.equals("d")){
+                isDir = true;
+            }
+            else if (!input.equals("f")){
+                System.out.println("Некорректный ввод");
+                System.exit(0);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("Введите путь к файлу/директории\n" +
+                "с входными данными в одном из форматов:\n" +
+                "\"C:/Users/User/dir/file.xml\"\n" +
+                "\"C:\\Users\\User\\dir\\file.xml\"\n" +
+                "\"C:/Users/User/dir/\"\n" +
+                "\"C:\\Users\\User\\dir\\\"");
+        scanner.nextLine();
+        String inPath = scanner.nextLine();
+        inputPath = inPath;
+
+        System.out.println("Введите путь к файлу/директории\n" +
+                "для выходных данных:\n" +
+                "\"C:/Users/User/dir/file.xml\"\n" +
+                "\"C:\\Users\\User\\dir\\file.xml\"\n" +
+                "\"C:/Users/User/dir/\"\n" +
+                "\"C:\\Users\\User\\dir\\\"");
+        String outPath = scanner.nextLine();
+        outputPath = outPath;
+
+        if (!isDir){
+            parseFile(inPath);
+        }
+        else {
+            parseDir(inPath);
+        }
+
+    }
+
+    public static void parseFile(String path) {
         try {
+            String xmlContent = readFileAsString(path);
+
+            // Удаление лишних символов перед декларацией XML
+            xmlContent = xmlContent.trim();
+
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
 
-            File xmlFile = new File("C:\\Users\\Mobil\\Desktop\\AI_tech\\AVI_data\\ТП10.xml");
+            File xmlFile = new File(path);
             Document document = builder.parse(xmlFile);
             document.getDocumentElement().normalize();
 
@@ -204,31 +266,34 @@ public class Main {
                     extractAndPrint(param, "PARAM_SIGN");
                 }
             }
-
-            // Парсинг блока <IUL_TP>
-            Element iulTP = (Element) parent.getElementsByTagName("IUL_TP").item(0);
-            System.out.println("\n----- IUL_TP -----");
-            extractAndPrint(iulTP, "IUL_COUNT");
-
-            NodeList iulLines = iulTP.getElementsByTagName("IUL_LINE");
-            for (int i = 0; i < iulLines.getLength(); i++) {
-                Element iulLine = (Element) iulLines.item(i);
-                System.out.println("\n  -- IUL_LINE --");
-                extractAndPrint(iulLine, "POST");
-                extractAndPrint(iulLine, "FIO");
-                extractAndPrint(iulLine, "DATA");
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private static void extractAndPrint(Element element, String tagName) {
+        File outputFile = new File(outputPath);
+
+        if (outputFile.isDirectory()) {
+            String inputFileName = new File(inputPath).getName();
+            String baseName = inputFileName.substring(0, inputFileName.lastIndexOf('.'));
+            String newFileName = baseName + "_parsed.txt";
+            outputFile = new File(outputFile, newFileName);
+        }
+
         NodeList nodeList = element.getElementsByTagName(tagName);
         if (nodeList.getLength() > 0) {
             String content = nodeList.item(0).getTextContent();
-            System.out.println(tagName + ": " + content);
+            if (content != null || tagName.equals("EV")){
+                if (content == null){
+                    content = "шт";
+                }
+                try (FileWriter writer = new FileWriter(outputFile, true)) {
+                    writer.write(tagName + ": " + content + "\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -238,5 +303,35 @@ public class Main {
             return nodeList.item(0).getTextContent();
         }
         return null;
+    }
+
+    private static void parseDir(String inputDir) {
+        File directory = new File(inputDir);
+        File[] xmlFiles = directory.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".xml");
+            }
+        });
+
+        if (xmlFiles != null && xmlFiles.length > 0) {
+            for (File xmlFile : xmlFiles) {
+                String path = xmlFile.getName();
+                System.out.println("Текущий файл: " + path);
+                parseFile(path);
+            }
+        } else {
+            System.out.println("Нет XML файлов в директории");
+        }
+    }
+    private static String readFileAsString(String path) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(path));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
     }
 }

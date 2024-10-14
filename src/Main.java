@@ -36,30 +36,35 @@ public class Main {
         }
         System.out.println("Введите путь к файлу/директории\n" +
                 "с входными данными в одном из форматов:\n" +
-                "\"C:/Users/User/dir/file.xml\"\n" +
-                "\"C:\\Users\\User\\dir\\file.xml\"\n" +
-                "\"C:/Users/User/dir/\"\n" +
-                "\"C:\\Users\\User\\dir\\\"");
+                "C:/Users/User/dir/file.xml\n" +
+                "C:\\Users\\User\\dir\\file.xml\n" +
+                "C:/Users/User/dir/\n" +
+                "C:\\Users\\User\\dir\\");
         scanner.nextLine();
         String inPath = scanner.nextLine();
+        if (isDir){
+            checkDirAccess(inPath);
+        }
         inputPath = inPath;
 
-        System.out.println("Введите путь к файлу/директории\n" +
+        System.out.println("Введите путь к директории\n" +
                 "для выходных данных:\n" +
-                "\"C:/Users/User/dir/file.xml\"\n" +
-                "\"C:\\Users\\User\\dir\\file.xml\"\n" +
-                "\"C:/Users/User/dir/\"\n" +
-                "\"C:\\Users\\User\\dir\\\"");
+                "C:/Users/User/dir/file.xml\n" +
+                "C:\\Users\\User\\dir\\file.xml\n" +
+                "C:/Users/User/dir/\n" +
+                "C:\\Users\\User\\dir\\");
         String outPath = scanner.nextLine();
+        if (isDir){
+            checkDirAccess(outPath);
+        }
         outputPath = outPath;
-
         if (!isDir){
             parseFile(inPath);
+            System.out.printf("Обработан файл: " + inPath);
         }
         else {
             parseDir(inPath);
         }
-
     }
 
     public static void parseFile(String path) {
@@ -79,7 +84,7 @@ public class Main {
             Element parent = (Element) document.getElementsByTagName("PARENT").item(0);
 
             // <PARENT>
-            System.out.println("----- PARENT -----");
+            //System.out.println("----- PARENT -----");
             extractAndPrint(parent, "PRAVILO_REV");
             extractAndPrint(parent, "IZDELIE");
             extractAndPrint(parent, "PARENT_OBOZN");
@@ -102,19 +107,18 @@ public class Main {
             extractAndPrint(parent, "PARENT_DATE_CREATED");
             extractAndPrint(parent, "PARENT_DEPART");
             extractAndPrint(parent, "PARENT_IDMAINDOC");
-            // Нет описания в docx
             extractAndPrint(parent, "PARENT_DATE_IZM");
             extractAndPrint(parent, "PARENT_N_IZV");
 
             // <TARGETS>
             Element targets = (Element) parent.getElementsByTagName("TARGETS").item(0);
-            System.out.println("\n----- TARGETS -----");
+            //System.out.println("\n----- TARGETS -----");
             extractAndPrint(targets, "TARGETS_COUNT");
 
             NodeList targetObjects = targets.getElementsByTagName("TRG_OBJ");
             for (int i = 0; i < targetObjects.getLength(); i++) {
                 Element targetObject = (Element) targetObjects.item(i);
-                System.out.println("\n  -- TRG_OBJ --");
+                //System.out.println("\n  -- TRG_OBJ --");
                 extractAndPrint(targetObject, "OBJ_OBOZN");
                 extractAndPrint(targetObject, "OBJ_NAME");
                 extractAndPrint(targetObject, "OBJ_TYPE");
@@ -123,13 +127,13 @@ public class Main {
 
             // <WORKAREA>
             Element workarea = (Element) parent.getElementsByTagName("WORKAREA").item(0);
-            System.out.println("\n----- WORKAREA -----");
+            //System.out.println("\n----- WORKAREA -----");
             extractAndPrint(workarea, "WORKAREA_COUNT");
 
             NodeList workAreaObjects = workarea.getElementsByTagName("WA_OBJ");
             for (int i = 0; i < workAreaObjects.getLength(); i++) {
                 Element workAreaObject = (Element) workAreaObjects.item(i);
-                System.out.println("\n  -- WA_OBJ --");
+                //System.out.println("\n  -- WA_OBJ --");
                 extractAndPrint(workAreaObject, "OBJ_OBOZN");
                 extractAndPrint(workAreaObject, "OBJ_NAME");
                 // значение OBJ_TYPE всегда одинаково
@@ -138,13 +142,13 @@ public class Main {
 
             // <FILES>
             Element files = (Element) parent.getElementsByTagName("FILES").item(0);
-            System.out.println("\n----- FILES -----");
+            //System.out.println("\n----- FILES -----");
             extractAndPrint(files, "FILES_COUNT");
 
             NodeList fileObjects = files.getElementsByTagName("FILE");
             for (int i = 0; i < fileObjects.getLength(); i++) {
                 Element fileObject = (Element) fileObjects.item(i);
-                System.out.println("\n  -- FILE --");
+                //System.out.println("\n  -- FILE --");
                 extractAndPrint(fileObject, "PATH");
                 extractAndPrint(fileObject, "NAME");
             }
@@ -155,21 +159,20 @@ public class Main {
             assert opersCountString != null;
             int opersCount = Integer.parseInt(opersCountString);
 
-            System.out.println("\n----- CHILDS_OBJ -----");
+            //System.out.println("\n----- CHILDS_OBJ -----");
             extractAndPrint(childsObj, "OPERS_COUNT");
             extractAndPrint(childsObj, "ZAGOT_COUNT");
 
             NodeList zagObjects = childsObj.getElementsByTagName("ZAG_OBJ");
             for (int i = 0; i < zagObjects.getLength(); i++) {
                 Element zagObject = (Element) zagObjects.item(i);
-                System.out.println("\n  -- ZAG_OBJ --");
+                //System.out.println("\n  -- ZAG_OBJ --");
                 extractAndPrint(zagObject, "OBJ_OBOZN");
                 extractAndPrint(zagObject, "OBJ_NAME");
                 extractAndPrint(zagObject, "OBJ_POZ");
                 extractAndPrint(zagObject, "OBJ_DESC");
                 extractAndPrint(zagObject, "MATERIAL");
                 extractAndPrint(zagObject, "MARKA_KE");
-                // TODO: Для EV добавить обработку пустого значения - по умолчанию значене "шт"
                 extractAndPrint(zagObject, "EV");
                 extractAndPrint(zagObject, "NORMA");
                 extractAndPrint(zagObject, "OBJ_KIM");
@@ -194,11 +197,11 @@ public class Main {
                  */
             }
             // <CHILDS_OBJ><OBJ></CHILDS_OBJ>
-            System.out.println("\n----- OBj (CHILDS_OBJ) -----");
+            //System.out.println("\n----- OBj (CHILDS_OBJ) -----");
             NodeList childObjects = childsObj.getElementsByTagName("OBJ");
             for (int i = 0; i < opersCount; i++) {
                 Element childObject = (Element) childObjects.item(i);
-                System.out.println("\n  -- OBJ --");
+                //System.out.println("\n  -- OBJ --");
                 extractAndPrint(childObject, "OBJ_NAME");
                 extractAndPrint(childObject, "OBJ_TYPE");
                 extractAndPrint(childObject, "OBJ_POZ");
@@ -215,12 +218,12 @@ public class Main {
                 }
                 int resursCount = Integer.parseInt(resursCountString);
 
-                System.out.println("\n--- RESURS ---");
+                //System.out.println("\n--- RESURS ---");
                 extractAndPrint(resurses, "RESURS_COUNT");
 
                 for (int j = 0; j < resursCount; j++){
                     Element resurs = (Element) resurses.getElementsByTagName("RES_OBJ").item(j);
-                    System.out.println("-- RES_OBJ --");
+                    //System.out.println("-- RES_OBJ --");
                     extractAndPrint(resurs, "OBJ_OBOZN");
                     extractAndPrint(resurs, "OBJ_NAME");
                     extractAndPrint(resurs, "OBJ_TYPE");
@@ -242,12 +245,12 @@ public class Main {
                 }
                 int paramsCount = Integer.parseInt(paramsCountString);
 
-                System.out.println("\n--- PARAMS ---");
+                //System.out.println("\n--- PARAMS ---");
                 extractAndPrint(resurses, "PARAMS_COUNT");
 
                 for (int j = 0; j < paramsCount; j++){
                     Element param = (Element) params.getElementsByTagName("PARAM").item(j);
-                    System.out.println("-- PARAM --");
+                    //System.out.println("-- PARAM --");
                     extractAndPrint(param, "PARAM_TYPE");
                     extractAndPrint(param, "PARAM_NUM");
                     extractAndPrint(param, "PARAM_DESC");
@@ -284,17 +287,24 @@ public class Main {
         NodeList nodeList = element.getElementsByTagName(tagName);
         if (nodeList.getLength() > 0) {
             String content = nodeList.item(0).getTextContent();
-            if (content != null || tagName.equals("EV")){
-                if (content == null){
-                    content = "шт";
-                }
+
+            // Проверяем, что content не пустой и не null
+            if (content != null && !content.trim().isEmpty() && !content.equals(".")) {
                 try (FileWriter writer = new FileWriter(outputFile, true)) {
                     writer.write(tagName + ": " + content + "\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if (content == null && tagName.equals("EV")) {
+                // Специальная проверка для тега EV, если значение равно null, записываем "шт"
+                try (FileWriter writer = new FileWriter(outputFile, true)) {
+                    writer.write(tagName + ": шт\n");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
+
     }
 
     private static String getValue(Element parent, String tagName) {
@@ -307,6 +317,12 @@ public class Main {
 
     private static void parseDir(String inputDir) {
         File directory = new File(inputDir);
+
+        // Фильтр для получения только XML файлов
+        if (!directory.isDirectory()) {
+            System.out.println("Указанный путь не является директорией: " + inputDir);
+            return;
+        }
         File[] xmlFiles = directory.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
@@ -314,16 +330,18 @@ public class Main {
             }
         });
 
+        // Проверка наличия XML файлов в директории
         if (xmlFiles != null && xmlFiles.length > 0) {
             for (File xmlFile : xmlFiles) {
-                String path = xmlFile.getName();
-                System.out.println("Текущий файл: " + path);
-                parseFile(path);
+                String fullPath = xmlFile.getAbsolutePath();  // Получаем полный путь к файлу
+                System.out.println("Текущий файл: " + fullPath);
+                parseFile(fullPath);  // Передаем полный путь в метод parseFile
             }
         } else {
             System.out.println("Нет XML файлов в директории");
         }
     }
+
     private static String readFileAsString(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(path));
         StringBuilder sb = new StringBuilder();
@@ -333,5 +351,25 @@ public class Main {
         }
         reader.close();
         return sb.toString();
+    }
+
+    private static void checkDirAccess(String inputDir){
+        File directory = new File(inputDir);
+
+        if (!directory.exists()) {
+            System.out.println("Директория не существует: " + inputDir);
+            System.exit(0);
+        } else if (!directory.isDirectory()) {
+            System.out.println("Путь не является директорией: " + inputDir);
+            System.exit(0);
+        } else if (!directory.canRead()) {
+            System.out.println("Нет прав на чтение из директории: " + inputDir);
+            System.exit(0);
+        } else if (!directory.canWrite()) {
+            System.out.println("Нет прав на запись в директорию: " + inputDir);
+            System.exit(0);
+        } else {
+            System.out.println("Директория доступна для чтения и записи: " + inputDir);
+        }
     }
 }

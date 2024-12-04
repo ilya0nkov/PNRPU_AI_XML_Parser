@@ -54,9 +54,8 @@ public class Main {
                 "C:/Users/User/dir/\n" +
                 "C:\\Users\\User\\dir\\");
         String outPath = scanner.nextLine();
-        if (isDir){
-            checkDirAccess(outPath);
-        }
+        checkDirAccess(outPath);
+
         outputPath = outPath;
         if (!isDir){
             parseFile(inPath);
@@ -85,61 +84,63 @@ public class Main {
 
             // <PARENT>
             //System.out.println("----- PARENT -----");
-            extractAndPrint(parent, "PRAVILO_REV");
+            // extractAndPrint(parent, "PRAVILO_REV");
             extractAndPrint(parent, "IZDELIE");
-            extractAndPrint(parent, "PARENT_OBOZN");
+            // extractAndPrint(parent, "PARENT_OBOZN");
             extractAndPrint(parent, "PARENT_NAME");
-            extractAndPrint(parent, "PARENT_TYPE");
-            extractAndPrint(parent, "PARENT_REV");
-            extractAndPrint(parent, "PARENT_STATUS");
+            // extractAndPrint(parent, "PARENT_TYPE");
+            // extractAndPrint(parent, "PARENT_REV");
+            // extractAndPrint(parent, "PARENT_STATUS");
             extractAndPrint(parent, "PARENT_TIME");
-            extractAndPrint(parent, "PARENT_N_RASP");
-            extractAndPrint(parent, "PARENT_N_ZAKAZ");
-            extractAndPrint(parent, "PARENT_SZ");
+            // extractAndPrint(parent, "PARENT_N_RASP");
+            // extractAndPrint(parent, "PARENT_N_ZAKAZ");
+            // extractAndPrint(parent, "PARENT_SZ");
             extractAndPrint(parent, "PARENT_DESC");
-            extractAndPrint(parent, "PARENT_VID");
+            // extractAndPrint(parent, "PARENT_VID");
             extractAndPrint(parent, "PARENT_TYPE_TD");
             extractAndPrint(parent, "PARENT_TRUD");
             extractAndPrint(parent, "PARENT_S_TTP");
+            /*
             extractAndPrint(parent, "PARENT_ETAP");
             extractAndPrint(parent, "PARENT_ETAPOV");
             extractAndPrint(parent, "PARENT_CREATOR");
             extractAndPrint(parent, "PARENT_DATE_CREATED");
             extractAndPrint(parent, "PARENT_DEPART");
             extractAndPrint(parent, "PARENT_IDMAINDOC");
+             */
             extractAndPrint(parent, "PARENT_DATE_IZM");
             extractAndPrint(parent, "PARENT_N_IZV");
 
             // <TARGETS>
             Element targets = (Element) parent.getElementsByTagName("TARGETS").item(0);
             //System.out.println("\n----- TARGETS -----");
-            extractAndPrint(targets, "TARGETS_COUNT");
+            //extractAndPrint(targets, "TARGETS_COUNT");
 
             NodeList targetObjects = targets.getElementsByTagName("TRG_OBJ");
             for (int i = 0; i < targetObjects.getLength(); i++) {
                 Element targetObject = (Element) targetObjects.item(i);
                 //System.out.println("\n  -- TRG_OBJ --");
-                extractAndPrint(targetObject, "OBJ_OBOZN");
+                //extractAndPrint(targetObject, "OBJ_OBOZN");
                 extractAndPrint(targetObject, "OBJ_NAME");
-                extractAndPrint(targetObject, "OBJ_TYPE");
+                //extractAndPrint(targetObject, "OBJ_TYPE");
                 extractAndPrint(targetObject, "OBJ_MD");
             }
 
             // <WORKAREA>
             Element workarea = (Element) parent.getElementsByTagName("WORKAREA").item(0);
             //System.out.println("\n----- WORKAREA -----");
-            extractAndPrint(workarea, "WORKAREA_COUNT");
+            //extractAndPrint(workarea, "WORKAREA_COUNT");
 
             NodeList workAreaObjects = workarea.getElementsByTagName("WA_OBJ");
             for (int i = 0; i < workAreaObjects.getLength(); i++) {
                 Element workAreaObject = (Element) workAreaObjects.item(i);
                 //System.out.println("\n  -- WA_OBJ --");
-                extractAndPrint(workAreaObject, "OBJ_OBOZN");
+                //extractAndPrint(workAreaObject, "OBJ_OBOZN");
                 extractAndPrint(workAreaObject, "OBJ_NAME");
                 // значение OBJ_TYPE всегда одинаково
                 // extractAndPrint(workAreaObject, "OBJ_TYPE");
             }
-
+            /*
             // <FILES>
             Element files = (Element) parent.getElementsByTagName("FILES").item(0);
             //System.out.println("\n----- FILES -----");
@@ -152,7 +153,7 @@ public class Main {
                 extractAndPrint(fileObject, "PATH");
                 extractAndPrint(fileObject, "NAME");
             }
-
+            */
             // <CHILDS_OBJ>
             Element childsObj = (Element) parent.getElementsByTagName("CHILDS_OBJ").item(0);
             String opersCountString = getValue(childsObj, "OPERS_COUNT");
@@ -167,7 +168,7 @@ public class Main {
             for (int i = 0; i < zagObjects.getLength(); i++) {
                 Element zagObject = (Element) zagObjects.item(i);
                 //System.out.println("\n  -- ZAG_OBJ --");
-                extractAndPrint(zagObject, "OBJ_OBOZN");
+                //extractAndPrint(zagObject, "OBJ_OBOZN");
                 extractAndPrint(zagObject, "OBJ_NAME");
                 extractAndPrint(zagObject, "OBJ_POZ");
                 extractAndPrint(zagObject, "OBJ_DESC");
@@ -177,12 +178,12 @@ public class Main {
                 extractAndPrint(zagObject, "NORMA");
                 extractAndPrint(zagObject, "OBJ_KIM");
                 extractAndPrint(zagObject, "VID_Z");
-                extractAndPrint(zagObject, "PR_I_RAZ");
+                //extractAndPrint(zagObject, "PR_I_RAZ");
                 extractAndPrint(zagObject, "KOL");
                 extractAndPrint(zagObject, "M_ZAG");
                 extractAndPrint(zagObject, "OTHOD");
-                extractAndPrint(zagObject, "GR_OTH");
-                extractAndPrint(zagObject, "PROFIL");
+                //extractAndPrint(zagObject, "GR_OTH");
+                //extractAndPrint(zagObject, "PROFIL");
 
                 // TODO: узнать бывают ли значения кроме 0
                 /*
@@ -219,11 +220,12 @@ public class Main {
                 int resursCount = Integer.parseInt(resursCountString);
 
                 //System.out.println("\n--- RESURS ---");
-                extractAndPrint(resurses, "RESURS_COUNT");
+                //extractAndPrint(resurses, "RESURS_COUNT");
 
                 for (int j = 0; j < resursCount; j++){
                     Element resurs = (Element) resurses.getElementsByTagName("RES_OBJ").item(j);
                     //System.out.println("-- RES_OBJ --");
+                    /*
                     extractAndPrint(resurs, "OBJ_OBOZN");
                     extractAndPrint(resurs, "OBJ_NAME");
                     extractAndPrint(resurs, "OBJ_TYPE");
@@ -236,6 +238,7 @@ public class Main {
                     extractAndPrint(resurs, "OBJ_ABS_XFORM");
                     extractAndPrint(resurs, "OBJ_OCC_XFORM");
                     extractAndPrint(resurs, "OBJ_DOC_POSTAV");
+                     */
                 }
 
                 Element params = (Element) childObject.getElementsByTagName("PARAMS").item(0);
@@ -254,6 +257,7 @@ public class Main {
                     extractAndPrint(param, "PARAM_TYPE");
                     extractAndPrint(param, "PARAM_NUM");
                     extractAndPrint(param, "PARAM_DESC");
+                    /*
                     extractAndPrint(param, "PARAM_PRIM");
                     extractAndPrint(param, "PARAM_UNIT");
                     extractAndPrint(param, "PARAM_N_VAL");
@@ -267,6 +271,7 @@ public class Main {
                     extractAndPrint(param, "PARAM_V_MAX");
                     extractAndPrint(param, "PARAM_V_MIN");
                     extractAndPrint(param, "PARAM_SIGN");
+                     */
                 }
             }
         } catch (Exception e) {

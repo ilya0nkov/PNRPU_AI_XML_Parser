@@ -8,11 +8,27 @@ import java.util.Scanner;
 import java.io.FilenameFilter;
 import java.io.*;
 
-public class Main {
+public class ParserClass {
 
-    private static String outputPath = "";
-    private static String inputPath = "";
-    public static void main(String[] args) {
+    private String outputPath = "";
+    private String inputPath = "";
+
+    public void setOutputPath(String outPath){
+        this.outputPath = outPath;
+    }
+
+    public void setInputPath(String inPath){
+        this.inputPath = inPath;
+    }
+
+    public String getOutputPath(){
+        return this.outputPath;
+    }
+
+    public String getInputPath(){
+        return this.inputPath;
+    }
+    public void mainParser(String[] args) {
         Scanner scanner = new Scanner(System.in);
         String input = "";
         boolean isDir = false;
@@ -45,7 +61,7 @@ public class Main {
         if (isDir){
             checkDirAccess(inPath);
         }
-        inputPath = inPath;
+        setOutputPath(inPath);
 
         System.out.println("Введите путь к директории\n" +
                 "для выходных данных:\n" +
@@ -56,7 +72,7 @@ public class Main {
         String outPath = scanner.nextLine();
         checkDirAccess(outPath);
 
-        outputPath = outPath;
+        setOutputPath(outPath);
         if (!isDir){
             parseFile(inPath);
             System.out.printf("Обработан файл: " + inPath);
@@ -66,12 +82,12 @@ public class Main {
         }
     }
 
-    public static void parseFile(String path) {
+    public void parseFile(String path) {
         try {
             String xmlContent = readFileAsString(path);
 
             // Удаление лишних символов перед декларацией XML
-            xmlContent = xmlContent.trim();
+            xmlContent.trim();
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -107,9 +123,9 @@ public class Main {
             extractAndPrint(parent, "PARENT_DATE_CREATED");
             extractAndPrint(parent, "PARENT_DEPART");
             extractAndPrint(parent, "PARENT_IDMAINDOC");
-             */
             extractAndPrint(parent, "PARENT_DATE_IZM");
             extractAndPrint(parent, "PARENT_N_IZV");
+            */
 
             // <TARGETS>
             Element targets = (Element) parent.getElementsByTagName("TARGETS").item(0);
@@ -220,7 +236,7 @@ public class Main {
                 int resursCount = Integer.parseInt(resursCountString);
 
                 //System.out.println("\n--- RESURS ---");
-                //extractAndPrint(resurses, "RESURS_COUNT");
+                extractAndPrint(resurses, "RESURS_COUNT");
 
                 for (int j = 0; j < resursCount; j++){
                     Element resurs = (Element) resurses.getElementsByTagName("RES_OBJ").item(j);
@@ -279,7 +295,7 @@ public class Main {
         }
     }
 
-    private static void extractAndPrint(Element element, String tagName) {
+    private void extractAndPrint(Element element, String tagName) {
         File outputFile = new File(outputPath);
 
         if (outputFile.isDirectory()) {
@@ -320,7 +336,7 @@ public class Main {
         return null;
     }
 
-    private static void parseDir(String inputDir) {
+    private void parseDir(String inputDir) {
         File directory = new File(inputDir);
 
         // Фильтр для получения только XML файлов
@@ -358,7 +374,7 @@ public class Main {
         return sb.toString();
     }
 
-    private static void checkDirAccess(String inputDir){
+    private void checkDirAccess(String inputDir){
         File directory = new File(inputDir);
 
         if (!directory.exists()) {

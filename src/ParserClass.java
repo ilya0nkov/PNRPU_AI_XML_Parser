@@ -96,26 +96,27 @@ public class ParserClass {
             Document document = builder.parse(xmlFile);
             document.getDocumentElement().normalize();
 
-            Element parent = (Element) document.getElementsByTagName("PARENT").item(0);
+            String baseTagName = "PARENT";
+            Element parent = (Element) document.getElementsByTagName(baseTagName).item(0);
 
             // <PARENT>
             //System.out.println("----- PARENT -----");
             // extractAndPrint(parent, "PRAVILO_REV");
-            extractAndPrint(parent, "IZDELIE");
+            extractAndPrint(parent, "IZDELIE", baseTagName);
             // extractAndPrint(parent, "PARENT_OBOZN");
-            extractAndPrint(parent, "PARENT_NAME");
+            extractAndPrint(parent, "PARENT_NAME", baseTagName);
             // extractAndPrint(parent, "PARENT_TYPE");
             // extractAndPrint(parent, "PARENT_REV");
             // extractAndPrint(parent, "PARENT_STATUS");
-            extractAndPrint(parent, "PARENT_TIME");
+            extractAndPrint(parent, "PARENT_TIME", baseTagName);
             // extractAndPrint(parent, "PARENT_N_RASP");
             // extractAndPrint(parent, "PARENT_N_ZAKAZ");
             // extractAndPrint(parent, "PARENT_SZ");
-            extractAndPrint(parent, "PARENT_DESC");
+            extractAndPrint(parent, "PARENT_DESC", baseTagName);
             // extractAndPrint(parent, "PARENT_VID");
-            extractAndPrint(parent, "PARENT_TYPE_TD");
-            extractAndPrint(parent, "PARENT_TRUD");
-            extractAndPrint(parent, "PARENT_S_TTP");
+            extractAndPrint(parent, "PARENT_TYPE_TD", baseTagName);
+            extractAndPrint(parent, "PARENT_TRUD", baseTagName);
+            extractAndPrint(parent, "PARENT_S_TTP", baseTagName);
             /*
             extractAndPrint(parent, "PARENT_ETAP");
             extractAndPrint(parent, "PARENT_ETAPOV");
@@ -128,7 +129,8 @@ public class ParserClass {
             */
 
             // <TARGETS>
-            Element targets = (Element) parent.getElementsByTagName("TARGETS").item(0);
+            baseTagName = "TARGETS";
+            Element targets = (Element) parent.getElementsByTagName(baseTagName).item(0);
             //System.out.println("\n----- TARGETS -----");
             //extractAndPrint(targets, "TARGETS_COUNT");
 
@@ -137,13 +139,14 @@ public class ParserClass {
                 Element targetObject = (Element) targetObjects.item(i);
                 //System.out.println("\n  -- TRG_OBJ --");
                 //extractAndPrint(targetObject, "OBJ_OBOZN");
-                extractAndPrint(targetObject, "OBJ_NAME");
+                extractAndPrint(targetObject, "OBJ_NAME", baseTagName);
                 //extractAndPrint(targetObject, "OBJ_TYPE");
-                extractAndPrint(targetObject, "OBJ_MD");
+                extractAndPrint(targetObject, "OBJ_MD", baseTagName);
             }
 
             // <WORKAREA>
-            Element workarea = (Element) parent.getElementsByTagName("WORKAREA").item(0);
+            baseTagName = "WORKAREA";
+            Element workarea = (Element) parent.getElementsByTagName(baseTagName).item(0);
             //System.out.println("\n----- WORKAREA -----");
             //extractAndPrint(workarea, "WORKAREA_COUNT");
 
@@ -152,7 +155,7 @@ public class ParserClass {
                 Element workAreaObject = (Element) workAreaObjects.item(i);
                 //System.out.println("\n  -- WA_OBJ --");
                 //extractAndPrint(workAreaObject, "OBJ_OBOZN");
-                extractAndPrint(workAreaObject, "OBJ_NAME");
+                extractAndPrint(workAreaObject, "OBJ_NAME", baseTagName);
                 // значение OBJ_TYPE всегда одинаково
                 // extractAndPrint(workAreaObject, "OBJ_TYPE");
             }
@@ -171,33 +174,34 @@ public class ParserClass {
             }
             */
             // <CHILDS_OBJ>
-            Element childsObj = (Element) parent.getElementsByTagName("CHILDS_OBJ").item(0);
+            baseTagName = "CHILDS_OBJ";
+            Element childsObj = (Element) parent.getElementsByTagName(baseTagName).item(0);
             String opersCountString = getValue(childsObj, "OPERS_COUNT");
             assert opersCountString != null;
             int opersCount = Integer.parseInt(opersCountString);
 
             //System.out.println("\n----- CHILDS_OBJ -----");
-            extractAndPrint(childsObj, "OPERS_COUNT");
-            extractAndPrint(childsObj, "ZAGOT_COUNT");
+            extractAndPrint(childsObj, "OPERS_COUNT", baseTagName);
+            extractAndPrint(childsObj, "ZAGOT_COUNT", baseTagName);
 
             NodeList zagObjects = childsObj.getElementsByTagName("ZAG_OBJ");
             for (int i = 0; i < zagObjects.getLength(); i++) {
                 Element zagObject = (Element) zagObjects.item(i);
                 //System.out.println("\n  -- ZAG_OBJ --");
                 //extractAndPrint(zagObject, "OBJ_OBOZN");
-                extractAndPrint(zagObject, "OBJ_NAME");
-                extractAndPrint(zagObject, "OBJ_POZ");
-                extractAndPrint(zagObject, "OBJ_DESC");
-                extractAndPrint(zagObject, "MATERIAL");
-                extractAndPrint(zagObject, "MARKA_KE");
-                extractAndPrint(zagObject, "EV");
-                extractAndPrint(zagObject, "NORMA");
-                extractAndPrint(zagObject, "OBJ_KIM");
-                extractAndPrint(zagObject, "VID_Z");
+                extractAndPrint(zagObject, "OBJ_NAME", baseTagName);
+                extractAndPrint(zagObject, "OBJ_POZ", baseTagName);
+                extractAndPrint(zagObject, "OBJ_DESC", baseTagName);
+                extractAndPrint(zagObject, "MATERIAL", baseTagName);
+                extractAndPrint(zagObject, "MARKA_KE", baseTagName);
+                extractAndPrint(zagObject, "EV", baseTagName);
+                extractAndPrint(zagObject, "NORMA", baseTagName);
+                extractAndPrint(zagObject, "OBJ_KIM", baseTagName);
+                extractAndPrint(zagObject, "VID_Z", baseTagName);
                 //extractAndPrint(zagObject, "PR_I_RAZ");
-                extractAndPrint(zagObject, "KOL");
-                extractAndPrint(zagObject, "M_ZAG");
-                extractAndPrint(zagObject, "OTHOD");
+                extractAndPrint(zagObject, "KOL", baseTagName);
+                extractAndPrint(zagObject, "M_ZAG", baseTagName);
+                extractAndPrint(zagObject, "OTHOD", baseTagName);
                 //extractAndPrint(zagObject, "GR_OTH");
                 //extractAndPrint(zagObject, "PROFIL");
 
@@ -215,20 +219,22 @@ public class ParserClass {
             }
             // <CHILDS_OBJ><OBJ></CHILDS_OBJ>
             //System.out.println("\n----- OBj (CHILDS_OBJ) -----");
-            NodeList childObjects = childsObj.getElementsByTagName("OBJ");
+            baseTagName = "OBJ";
+            NodeList childObjects = childsObj.getElementsByTagName(baseTagName);
             for (int i = 0; i < opersCount; i++) {
                 Element childObject = (Element) childObjects.item(i);
                 //System.out.println("\n  -- OBJ --");
-                extractAndPrint(childObject, "OBJ_NAME");
-                extractAndPrint(childObject, "OBJ_TYPE");
-                extractAndPrint(childObject, "OBJ_POZ");
-                extractAndPrint(childObject, "OBJ_TIME");
-                extractAndPrint(childObject, "OBJ_DESC");
-                extractAndPrint(childObject, "OBJ_DOP_INF");
-                extractAndPrint(childObject, "OBJ_RESOURCE");
-                extractAndPrint(childObject, "OBJ_REJ_VYP");
+                extractAndPrint(childObject, "OBJ_NAME", baseTagName);
+                extractAndPrint(childObject, "OBJ_TYPE", baseTagName);
+                extractAndPrint(childObject, "OBJ_POZ", baseTagName);
+                extractAndPrint(childObject, "OBJ_TIME", baseTagName);
+                extractAndPrint(childObject, "OBJ_DESC", baseTagName);
+                extractAndPrint(childObject, "OBJ_DOP_INF", baseTagName);
+                extractAndPrint(childObject, "OBJ_RESOURCE", baseTagName);
+                extractAndPrint(childObject, "OBJ_REJ_VYP", baseTagName);
 
-                Element resurses = (Element) childObject.getElementsByTagName("RESURS").item(0);
+                baseTagName = "RESURS";
+                Element resurses = (Element) childObject.getElementsByTagName(baseTagName).item(0);
                 String resursCountString = getValue(resurses, "RESURS_COUNT");
                 if (resursCountString == null){
                     continue;
@@ -236,7 +242,7 @@ public class ParserClass {
                 int resursCount = Integer.parseInt(resursCountString);
 
                 //System.out.println("\n--- RESURS ---");
-                extractAndPrint(resurses, "RESURS_COUNT");
+                extractAndPrint(resurses, "RESURS_COUNT", baseTagName);
 
                 for (int j = 0; j < resursCount; j++){
                     Element resurs = (Element) resurses.getElementsByTagName("RES_OBJ").item(j);
@@ -265,14 +271,15 @@ public class ParserClass {
                 int paramsCount = Integer.parseInt(paramsCountString);
 
                 //System.out.println("\n--- PARAMS ---");
-                extractAndPrint(resurses, "PARAMS_COUNT");
+                extractAndPrint(resurses, "PARAMS_COUNT", "");
 
                 for (int j = 0; j < paramsCount; j++){
+                    baseTagName = "PARAM";
                     Element param = (Element) params.getElementsByTagName("PARAM").item(j);
                     //System.out.println("-- PARAM --");
-                    extractAndPrint(param, "PARAM_TYPE");
-                    extractAndPrint(param, "PARAM_NUM");
-                    extractAndPrint(param, "PARAM_DESC");
+                    extractAndPrint(param, "PARAM_TYPE", baseTagName);
+                    extractAndPrint(param, "PARAM_NUM", baseTagName);
+                    extractAndPrint(param, "PARAM_DESC", baseTagName);
                     /*
                     extractAndPrint(param, "PARAM_PRIM");
                     extractAndPrint(param, "PARAM_UNIT");
@@ -295,7 +302,7 @@ public class ParserClass {
         }
     }
 
-    private void extractAndPrint(Element element, String tagName) {
+    private void extractAndPrint(Element element, String tagName, String baseTagName) {
         File outputFile = new File(outputPath);
 
         if (outputFile.isDirectory()) {
@@ -312,7 +319,12 @@ public class ParserClass {
             // Проверяем, что content не пустой и не null
             if (content != null && !content.trim().isEmpty() && !content.equals(".")) {
                 try (FileWriter writer = new FileWriter(outputFile, true)) {
-                    writer.write(tagName + ": " + content + "\n");
+                    if(baseTagName.isEmpty()){
+                        writer.write(tagName + ": " + content + "\n");
+                    }
+                    else{
+                        writer.write(baseTagName + " | " + tagName + ": " + content + "\n");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
